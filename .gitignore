@@ -1,0 +1,14 @@
+# Derived from Avid's binaries on the user's machine; never distribute.
+proto/
+
+# Build output
+bin/
+obj/
+dist/
+*.user
+.vs/
+
+# Local test data and results
+testmedia/
+out/
+__pycache__/

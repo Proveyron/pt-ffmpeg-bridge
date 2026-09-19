@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{850ADC1E-C050-4BB9-BFF9-6517389A0980}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Protocol", "src\Bridge.Protocol\Bridge.Protocol.csproj", "{FF165AE3-1CD6-4414-AE5A-73991D2368D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Decode", "src\Bridge.Decode\Bridge.Decode.csproj", "{918F4058-213F-4655-98C3-2BC272CDA8DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Server", "src\Bridge.Server\Bridge.Server.csproj", "{164324E0-73B0-477F-8AA8-C54C495EAA3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1FCA5C72-6417-46DB-B29D-34A161999E43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge.Tests", "tests\Bridge.Tests\Bridge.Tests.csproj", "{941F5438-18A6-4E05-80C9-79739DB4149C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF165AE3-1CD6-4414-AE5A-73991D2368D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF165AE3-1CD6-4414-AE5A-73991D2368D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF165AE3-1CD6-4414-AE5A-73991D2368D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF165AE3-1CD6-4414-AE5A-73991D2368D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918F4058-213F-4655-98C3-2BC272CDA8DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918F4058-213F-4655-98C3-2BC272CDA8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918F4058-213F-4655-98C3-2BC272CDA8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918F4058-213F-4655-98C3-2BC272CDA8DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164324E0-73B0-477F-8AA8-C54C495EAA3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164324E0-73B0-477F-8AA8-C54C495EAA3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164324E0-73B0-477F-8AA8-C54C495EAA3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164324E0-73B0-477F-8AA8-C54C495EAA3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{941F5438-18A6-4E05-80C9-79739DB4149C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941F5438-18A6-4E05-80C9-79739DB4149C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941F5438-18A6-4E05-80C9-79739DB4149C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941F5438-18A6-4E05-80C9-79739DB4149C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FF165AE3-1CD6-4414-AE5A-73991D2368D0} = {850ADC1E-C050-4BB9-BFF9-6517389A0980}
+		{918F4058-213F-4655-98C3-2BC272CDA8DE} = {850ADC1E-C050-4BB9-BFF9-6517389A0980}
+		{164324E0-73B0-477F-8AA8-C54C495EAA3A} = {850ADC1E-C050-4BB9-BFF9-6517389A0980}
+		{941F5438-18A6-4E05-80C9-79739DB4149C} = {1FCA5C72-6417-46DB-B29D-34A161999E43}
+	EndGlobalSection
+EndGlobal

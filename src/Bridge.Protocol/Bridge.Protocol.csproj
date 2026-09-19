@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ProtoFile>$(MSBuildThisFileDirectory)..\..\proto\QuickTimeWrapper.proto</ProtoFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.36.2" />
+    <PackageReference Include="Grpc.Tools" Version="2.84.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- The schema is extracted from the user's own Pro Tools install and is never committed. -->
+  <ItemGroup>
+    <Protobuf Include="$(ProtoFile)" GrpcServices="None" Link="proto\QuickTimeWrapper.proto" />
+  </ItemGroup>
+
+  <Target Name="CheckProtoExtracted" BeforeTargets="BeforeBuild;Protobuf_BeforeCompile">
+    <Error Condition="!Exists('$(ProtoFile)')"
+           Text="proto\QuickTimeWrapper.proto is missing. Run: python tools\extract_proto.py (requires Pro Tools installed)." />
+  </Target>
+
+</Project>
