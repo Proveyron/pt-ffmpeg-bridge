@@ -32,45 +32,59 @@ Decoding details:
   called every track VBR, and Pro Tools pads VBR imports by 0.4% (7.5 s of silence on a 31-minute file).
 - Multichannel audio is reordered to Pro Tools' film order (L C R Ls Rs LFE).
 
-## Requirements
+## Install
 
-- Pro Tools for Windows (x64) that ships `QuickTimeServer\ProToolsQuickTimeServer.exe` (12.x)
-- FFmpeg with `ffmpeg.exe` and `ffprobe.exe` — e.g. `winget install Gyan.FFmpeg`
-- To build: .NET 8 SDK, Python 3 with `protobuf` (only to extract the schema)
-- For the test tools: `pip install protobuf pywin32 numpy` (and `frida` for `trace_server.py`)
+1. Quit Pro Tools.
+2. Download `pt-ffmpeg-bridge-setup-<version>.exe` from
+   [Releases](https://github.com/Proveyron/pt-ffmpeg-bridge/releases) and run it (it asks for admin rights).
+   The installer is not code-signed, so SmartScreen may warn: choose *More info → Run anyway*.
+3. Start Pro Tools and import as usual (**File → Import → Audio**). FLAC, OGG, Opus, … now convert.
 
-## Build
+Setup installs the bridge and a bundled FFmpeg (unmodified LGPL build from
+[BtbN/FFmpeg-Builds](https://github.com/BtbN/FFmpeg-Builds)) into `C:\Program Files\pt-ffmpeg-bridge`,
+backs up Avid's helper as `QuickTimeServer\ProToolsQuickTimeServer.orig.exe` and puts the bridge in its
+place. Uninstalling from **Apps & Features** restores Avid's original. QuickTime 7 is no longer needed
+and can be uninstalled.
 
-```powershell
-python tools\extract_proto.py            # reads the schema out of your installed ProToolsQuickTimeServer.exe
-dotnet test
-dotnet publish src\Bridge.Server -c Release -o dist
-```
+Silent install: `pt-ffmpeg-bridge-setup-<version>.exe /VERYSILENT`, plus `/PTDIR="D:\Avid\Pro Tools"` for a
+non-default Pro Tools folder.
 
-The extracted `proto/QuickTimeWrapper.proto` is derived from Avid's binary, so it is generated on
-your machine and never committed.
+Requirements: Windows 10/11 x64 and a Pro Tools version that ships
+`QuickTimeServer\ProToolsQuickTimeServer.exe` (Pro Tools 12.x for Windows).
 
-## Install / uninstall
+### Configuration
 
-Close Pro Tools, then:
-
-```powershell
-.\install.ps1      # backs up Avid's exe as ProToolsQuickTimeServer.orig.exe, installs the bridge
-.\uninstall.ps1    # restores the original
-```
-
-After installing you can uninstall QuickTime 7 from Windows' Apps & Features.
-
-Optional `bridge.json` next to the installed exe (install.ps1 writes one):
+The installer writes `QuickTimeServer\bridge.json`:
 
 ```json
 { "ffmpegPath": "C:\\...\\ffmpeg.exe", "ffprobePath": "C:\\...\\ffprobe.exe", "exactLengths": true, "debugLog": false }
 ```
 
 - `exactLengths: false` reports every track as VBR like QuickTime did (imports get a silent 0.4% tail).
-- `debugLog: true` logs every request and reply (`install.ps1 -DebugLog` sets it).
+- `debugLog: true` logs every request and reply.
 
 Logs: `%LOCALAPPDATA%\pt-ffmpeg-bridge\logs`.
+
+## Build
+
+Needs Pro Tools installed (the protocol schema is read from its helper), .NET 8 SDK, Python 3 with
+`protobuf`, and Inno Setup 6 (`winget install JRSoftware.InnoSetup`).
+
+```powershell
+.\build-installer.ps1 -Version 0.1.0   # tests, publish, fetch pinned FFmpeg (SHA-256 checked), build build\out\*-setup-*.exe
+```
+
+The schema extracted to `proto/QuickTimeWrapper.proto` comes from Avid's binary, so it is generated on the
+build machine and never committed. Development loop without the installer:
+
+```powershell
+python tools\extract_proto.py
+dotnet test
+dotnet publish src\Bridge.Server -c Release -o dist
+.\install.ps1      # installs dist\ using FFmpeg from PATH; .\uninstall.ps1 restores Avid's helper
+```
+
+The test tools need `pip install protobuf pywin32 numpy` (and `frida` for `trace_server.py`).
 
 ## Verify without Pro Tools
 
@@ -96,6 +110,7 @@ python tools\verify_server.py dist\ProToolsQuickTimeServer.exe testmedia\*
 src/Bridge.Protocol   DIPC framing, named pipes, shared memory, protobuf messages (generated)
 src/Bridge.Decode     ffprobe probing, ffmpeg PCM cache, channel selection
 src/Bridge.Server     ProToolsQuickTimeServer.exe: method handlers
+installer/            Inno Setup script (build-installer.ps1 builds the single setup exe)
 tests/Bridge.Tests    unit tests (framing checked against captured Pro Tools traffic)
 tools/                schema extractor, DIPC test client, end-to-end verifier, Frida traffic tracer
 ```

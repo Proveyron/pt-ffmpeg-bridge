@@ -19,6 +19,11 @@
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <Company>pt-ffmpeg-bridge</Company>
+    <Product>pt-ffmpeg-bridge</Product>
+    <AssemblyTitle>pt-ffmpeg-bridge (FFmpeg replacement for Pro Tools' QuickTime helper)</AssemblyTitle>
+    <Copyright>Copyright (c) 2026 Proveyron. MIT License.</Copyright>
   </PropertyGroup>
 
 </Project>

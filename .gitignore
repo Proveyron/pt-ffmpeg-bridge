@@ -1,7 +1,8 @@
-# Derived from Avid's binaries on the user's machine; never distribute.
+# Extracted from Avid's binary on the build machine; never committed (the build compiles it in).
 proto/
 
 # Build output
+build/
 bin/
 obj/
 dist/
