@@ -3,12 +3,46 @@
 An open-source, FFmpeg-backed drop-in replacement for the QuickTime helper that Pro Tools uses to
 import audio it can't read natively. It removes the dependency on QuickTime 7 for Windows (abandoned
 in 2016, with unpatched vulnerabilities) and lets the Import Audio dialog accept anything FFmpeg
-decodes: FLAC, ALAC, AAC/M4A, MP4/MOV audio, OGG Vorbis, Opus, WavPack, APE, WMA, AC-3/E-AC-3,
-DTS, multichannel, 24-bit/high-sample-rate, …
+decodes: FLAC, OGG Vorbis, Opus, WavPack, WMA, AC-3/E-AC-3, DTS, TTA, Matroska/WebM, ALAC, AAC/M4A,
+MP4/MOV audio, multichannel, 24-bit/high-sample-rate, … (see [Formats](#formats)).
 
 Tested live with Pro Tools 12.5 on Windows 10: FLAC, ALAC, AAC/M4A, MP4/MOV audio, OGG, Opus, WavPack
 and MP3 import through the normal Import Audio dialog. A 31-minute 24-bit FLAC imports bit-exact at its
 exact length, and 5.1 files land in the right channels.
+
+## Formats
+
+### Newly supported: Pro Tools could not import these through QuickTime
+
+| Format | Files | With QuickTime 7 | With pt-ffmpeg-bridge |
+|---|---|---|---|
+| **FLAC** (16/24-bit, up to 96 kHz, 5.1) | `.flac` | ❌ "unreadable by Pro Tools" | ✅ imported, bit-exact |
+| **Ogg Vorbis** | `.ogg` | ❌ unreadable | ✅ imported |
+| **Opus** | `.opus` | ❌ unreadable | ✅ imported |
+| **FLAC in MP4** | `.mp4`, `.m4a` | ❌ unreadable | ✅ imported, bit-exact |
+| **Opus in MP4** | `.mp4` | ❌ unreadable | ✅ imported |
+| **WavPack** | `.wv` | ❌ no decoder | ✅ imported |
+| **WMA** | `.wma` | ❌ no decoder | 🧪 decoded |
+| **AC-3 / E-AC-3** (Dolby Digital / Plus) | `.ac3`, `.eac3` | ❌ no decoder | 🧪 decoded |
+| **DTS** | `.dts` | ❌ no decoder | 🧪 decoded |
+| **TTA** (True Audio) | `.tta` | ❌ no decoder | 🧪 decoded, bit-exact |
+| **Matroska / WebM audio** (Vorbis, Opus, FLAC…) | `.mka`, `.mkv`, `.webm` | ❌ no decoder | 🧪 decoded |
+| **Wave64** | `.w64` | ❌ no decoder | 🧪 decoded |
+| **CAF** (Core Audio Format), **MPEG-1 Layer II** | `.caf`, `.mp2` | not tested | 🧪 decoded |
+
+### Supported before, now better
+
+| Format | With QuickTime 7 | With pt-ffmpeg-bridge |
+|---|---|---|
+| **AAC** (`.m4a`, `.mp4`, `.aac`), **audio from `.mov`** | 16-bit only; first 2112 samples dropped; +0.4% silent tail | ✅ 24-bit; encoder delay handled from the edit list; exact length |
+| **ALAC** (`.m4a`) | +0.4% silent tail (7.5 s on 31 min) | ✅ bit-exact at the exact length |
+| **Multichannel** (5.1) | n/a for the formats above | ✅ correct Pro Tools channel order (L C R Ls Rs LFE) |
+
+✅ = imported in Pro Tools 12.5 and checked against the source. 🧪 = decoded by the bridge in the automated
+end-to-end test (`tools/verify_server.py`: same calls Pro Tools makes, output compared with a direct FFmpeg
+decode); Pro Tools routes these extensions to the bridge the same way, but they have not been imported
+live yet. "Unreadable" is what QuickTime answered in a captured Pro Tools session. Anything else FFmpeg
+decodes (APE, AMR, DSD, …) should work too. WAV, AIFF and MP3 are still read by Pro Tools itself.
 
 ## How it works
 
